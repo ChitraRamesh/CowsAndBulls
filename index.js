@@ -14,7 +14,16 @@ server.use(bodyParser.urlencoded({
 server.use(bodyParser.json());
 
 server.post('/get-cows-and-bulls', (req, res) => {
-
+ 
+  console.log(res);
+  
+  return res.json({
+            //speech: 'Something went wrong!!!',
+           // displayText: 'Something went wrong!',
+            //source: 'get-cows-and-bulls',
+			fulfillmentText: "Wrong"
+			
+        });
     
     const movieToSearch = req.body.result && req.body.result.parameters && req.body.result.parameters.movie ? req.body.result.parameters.movie : 'The Godfather';
     const reqUrl = encodeURI(`http://www.omdbapi.com/?t=${movieToSearch}&apikey=${API_KEY}`);
