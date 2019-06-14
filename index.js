@@ -34,7 +34,7 @@ server.post('/get-cows-and-bulls', (req, res) => {
                 speech: dataToSend,
                 displayText: dataToSend,
                 source: 'get-cows-and-bulls',
-				fulfillmanrText : "Thats right"
+				fulfillmentText : "Thats right"
             });
         });
     }, (error) => {
