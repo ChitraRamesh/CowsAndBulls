@@ -8,7 +8,7 @@ const http = require('http');
 
 const server = express();
 server.use(bodyParser.urlencoded({
-    extended: true
+    extended: false
 }));
 
 server.use(bodyParser.json());
