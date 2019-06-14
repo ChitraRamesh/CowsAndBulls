@@ -33,14 +33,17 @@ server.post('/get-cows-and-bulls', (req, res) => {
             return res.json({
                 speech: dataToSend,
                 displayText: dataToSend,
-                source: 'get-cows-and-bulls'
+                source: 'get-cows-and-bulls',
+				fulfillmanrText : "Thats right"
             });
         });
     }, (error) => {
         return res.json({
             speech: 'Something went wrong!!!',
             displayText: 'Something went wrong!',
-            source: 'get-cows-and-bulls'
+            source: 'get-cows-and-bulls',
+			fulfillmentText" "Wrong"
+			
         });
     });
 });
