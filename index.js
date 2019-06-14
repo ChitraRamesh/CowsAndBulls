@@ -8,18 +8,13 @@ const http = require('http');
 
 const server = express();
 server.use(bodyParser.urlencoded({
-    extended: false
+    extended: true
 }));
 
 server.use(bodyParser.json());
 
 server.post('/get-cows-and-bulls', (req, res) => {
-    
-	 return res.json({
-            speech: 'Something went wrong!!!',
-            displayText: 'Something went wrong!',
-            source: 'get-cows-and-bulls'
-        });
+
     
     const movieToSearch = req.body.result && req.body.result.parameters && req.body.result.parameters.movie ? req.body.result.parameters.movie : 'The Godfather';
     const reqUrl = encodeURI(`http://www.omdbapi.com/?t=${movieToSearch}&apikey=${API_KEY}`);
@@ -51,5 +46,5 @@ server.post('/get-cows-and-bulls', (req, res) => {
 });
 
 server.listen((process.env.PORT || 8000), () => {
-    console.log("Server is up and running...");
+    console.log("Cows and bulls Server is up and running...");
 });
