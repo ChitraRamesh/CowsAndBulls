@@ -42,7 +42,7 @@ server.post('/get-cows-and-bulls', (req, res) => {
             speech: 'Something went wrong!!!',
             displayText: 'Something went wrong!',
             source: 'get-cows-and-bulls',
-			fulfillmentText" "Wrong"
+			fulfillmentText: "Wrong"
 			
         });
     });
