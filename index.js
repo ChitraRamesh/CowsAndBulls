@@ -15,16 +15,19 @@ server.use(bodyParser.json());
 
 server.post('/get-cows-and-bulls', (req, res) => {
  
-  console.log(req.body.queryResult.queryText);
-  console.log(req.body.queryResult.parameters.theWord);
-  let saidWord = req.body.queryResult.parameters.theWord;
-  let theword = "pig";
-  if(theword.indexOf(saidWord) == 0)
+  //console.log(req.body.queryResult.queryText);
+  console.log(req.body.queryResult.outputContexts.name);
+  
+  let saidWord = req.body.queryResult.parameters.theword;
+  let myWord = "pig";
+  if(myWord.indexOf(saidWord) == 0)
 	 return res.json({
             //speech: 'Something went wrong!!!',
            // displayText: 'Something went wrong!',
             //source: 'get-cows-and-bulls',
-			fulfillmentText: "Pig is right"
+			fulfillmentText: myWord + "is right",
+			 
+					
 			
         });  
   
