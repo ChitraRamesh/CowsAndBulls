@@ -18,8 +18,8 @@ server.post('/get-cows-and-bulls', (req, res) => {
   console.log(req.body.queryResult.queryText);
   console.log(req.body.queryResult.parameters.theWord);
   let saidWord = req.body.queryResult.parameters.theWord;
-  
-  if(saidWord =="pig")
+  let theword = "pig"
+  if(theword.indexOf(saidWord) == 0)
 	 return res.json({
             //speech: 'Something went wrong!!!',
            // displayText: 'Something went wrong!',
