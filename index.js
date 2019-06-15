@@ -13,10 +13,13 @@ server.use(bodyParser.urlencoded({
 
 server.use(bodyParser.json());
 
+
+
 server.post('/get-cows-and-bulls', (req, res) => {
- 
+	
+ let myJson = '
   //console.log(req.body.queryResult.queryText);
-  console.log(req.body.queryResult.outputContexts.name);
+  console.log(req.body.queryResult.outputContexts[0].name);
   
   let saidWord = req.body.queryResult.parameters.theword;
   let myWord = "pig";
