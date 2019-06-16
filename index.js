@@ -30,8 +30,8 @@ server.post('/get-cows-and-bulls', (req, res) => {
 		if(req.body.queryResult.outputContexts[i].name.indexOf(myContext) > 1)
 		{
 				myContext = req.body.queryResult.outputContexts[i].name;
-				lifespanCount = req.body.queryResult.outputContexts[i].lifespanCount -1;
-				lengthOfWord = req.body.queryResult.outputContexts[i].lengthOfWord;
+				lifespanCount = req.body.queryResult.outputContexts[i].lifespanCount;
+				lengthOfWord = req.body.queryResult.outputContexts[i].parameters.lengthOfWord;
 				break;
 		}
 	}
@@ -43,7 +43,7 @@ server.post('/get-cows-and-bulls', (req, res) => {
             //speech: 'Something went wrong!!!',
            // displayText: 'Something went wrong!',
             //source: 'get-cows-and-bulls',
-			fulfillmentText: myWord + " is right. If you want to play again, say the numbetr of letters ",
+			fulfillmentText: myWord + " is right. If you want to play again, say the number of letters ",
 			"outputContexts": [
 			{
 			  "name": myContext,
@@ -71,13 +71,8 @@ server.post('/get-cows-and-bulls', (req, res) => {
             //speech: 'Something went wrong!!!',
            // displayText: 'Something went wrong!',
             //source: 'get-cows-and-bulls',
-			fulfillmentText:   responseText,
-			"outputContexts": [
-			{
-			  "name": myContext,
-			  "lifespanCount": lifespanCount
-			   
-			}
+			fulfillmentText:   responseText
+			 
 		  ]
 			
         });
