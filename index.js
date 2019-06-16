@@ -24,12 +24,14 @@ server.post('/get-cows-and-bulls', (req, res) => {
   let countOfContexts = req.body.queryResult.outputContexts.length;
   let myContext  = "sayletter-followup";
   var lifespanCount = 0;
+  var lengthOfWord = 0;
   var i;
  for (i = 0; i < countOfContexts; i++) { 
 		if(req.body.queryResult.outputContexts[i].name.indexOf(myContext) > 1)
 		{
 				myContext = req.body.queryResult.outputContexts[i].name;
 				lifespanCount = req.body.queryResult.outputContexts[i].lifespanCount -1;
+				lengthOfWord = req.body.queryResult.outputContexts[i].lengthOfWord;
 				break;
 		}
 	}
@@ -41,7 +43,7 @@ server.post('/get-cows-and-bulls', (req, res) => {
             //speech: 'Something went wrong!!!',
            // displayText: 'Something went wrong!',
             //source: 'get-cows-and-bulls',
-			fulfillmentText: myWord + "is right",
+			fulfillmentText: myWord + " is right. If you want to play again, say the numbetr of letters ",
 			"outputContexts": [
 			{
 			  "name": myContext,
@@ -53,14 +55,23 @@ server.post('/get-cows-and-bulls', (req, res) => {
 					
 			
         });  
-  
-  
+  var responseText =  saidWord + " is Wrong"
+  if(saidWord.length != lengthOfWord) 
+  {
+	  responseText = saidWord + " is not a " + lengthOfWord + " word. Try again. You have " + lifespanCount + "attempts";
+	 
+  }
+  else
+  {
+	   //calculate cows and bulls.
+	   
+  }
   
   return res.json({
             //speech: 'Something went wrong!!!',
            // displayText: 'Something went wrong!',
             //source: 'get-cows-and-bulls',
-			fulfillmentText:  saidWord + " is Wrong",
+			fulfillmentText:   responseText,
 			"outputContexts": [
 			{
 			  "name": myContext,
