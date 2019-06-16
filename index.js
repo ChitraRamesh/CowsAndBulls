@@ -31,7 +31,7 @@ server.post('/get-cows-and-bulls', (req, res) => {
 		{
 				myContext = req.body.queryResult.outputContexts[i].name;
 				lifespanCount = req.body.queryResult.outputContexts[i].lifespanCount;
-				lengthOfWord = req.body.queryResult.outputContexts[i].parameters.lengthOfWord;
+				lengthOfWord = req.body.queryResult.outputContexts[i].parameters.lengthOfword;
 				break;
 		}
 	}
