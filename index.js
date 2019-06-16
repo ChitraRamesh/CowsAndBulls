@@ -73,7 +73,7 @@ server.post('/get-cows-and-bulls', (req, res) => {
             //source: 'get-cows-and-bulls',
 			fulfillmentText:   responseText
 			 
-		  ]
+		 
 			
         });
     
