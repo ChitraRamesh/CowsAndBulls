@@ -32,7 +32,7 @@ calculateCowAndBull = (word, saidWord) => {
     //convert words into arrays.
     //iterate thru word and match for saidword
 
-    var arr_word = word.toUppercase().split('')
+    var arr_word = word.toUpperCase().split('')
     var arr_saidWord = saidWord.toUpperCase().split('')
     var bull = 0;
     var cow = 0;
@@ -104,7 +104,8 @@ client.get('myWord', function (error, result) {
 //let myWord = arrayOf3letterWords[Math.floor(Math.random() * 10)];     // returns a random integer from 0 to 9]
 
   //check if it is the same word
-  if(myWord.indexOf(saidWord) == 0)
+  if(myWord.indexOf(saidWord) == 0) {
+    client.set('myWord', null); //reset the word
 	 return res.json({
             //speech: 'Something went wrong!!!',
            // displayText: 'Something went wrong!',
@@ -120,7 +121,8 @@ client.get('myWord', function (error, result) {
 			 
 					
 			
-        });  
+        }); 
+    } 
   var responseText = "" ;
   if(saidWord.length != lengthOfWord) 
   {
@@ -133,7 +135,15 @@ client.get('myWord', function (error, result) {
        const [bulls, cows] = calculateCowAndBull(myWord, saidWord);
        responseText = saidWord + " has " + bulls + " bulls and " + cows + " cows ";
   }
-  responseText += " Try again. You have " + lifespanCount + "attempts";
+
+  
+  if(lifespanCount == 0) 
+  {
+    client.set('myWord', null);//reset the word
+    responseText += " No more attempts ";
+  }
+  else 
+     responseText += " You have " + lifespanCount + "attempts";
   return res.json({
             //speech: 'Something went wrong!!!',
            // displayText: 'Something went wrong!',
