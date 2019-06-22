@@ -99,7 +99,7 @@ client.get('myWord', function (error, result) {
 });
 
 //let myWord = arrayOf3letterWords[Math.floor(Math.random() * 10)];     // returns a random integer from 0 to 9]
-
+  console.log(myWord, saidWord);
   //check if it is the same word
   if(myWord.indexOf(saidWord) == 0) {
     client.set('myWord', null); //reset the word
