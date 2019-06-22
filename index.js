@@ -89,7 +89,7 @@ client.get('myWord', function (error, result) {
        //word not set yet
        // returns a random integer from 0 to 9]
        let myWord = arrayOf3letterWords[Math.floor(Math.random() * 10)];           
-       client.set('myWord', myWord, redis.print);
+       client.set('myWord', myWord);
        console.log("My new word is " + myWord)
     }
     else
