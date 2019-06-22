@@ -56,6 +56,42 @@ calculateCowAndBull = (word, saidWord) => {
     }
     return [bull, cow];
 }
+
+processWords = (myWord, saidWord, lifespanCount, res) => {
+    console.log(myWord, saidWord);
+    myWord = myWord.toUpperCase();
+    saidWord = saidWord.toUpperCase();
+    //check if it is the same word
+    if(myWord.indexOf(saidWord) == 0) {
+      client.set('myWord', null); //reset the word
+       return res.json({
+              fulfillmentText: myWord + " is right. If you want to play again, say the number of letters ",
+              "outputContexts": [
+              {
+                "name": myContext,
+                "lifespanCount": 0 //end game.
+                 
+              }
+            ]
+          }); 
+      } 
+    var responseText = "" ;
+ 
+    //calculate cows and bulls.
+    const [bulls, cows] = calculateCowAndBull(myWord, saidWord);
+    responseText = saidWord + " has " + bulls + " bulls and " + cows + " cows ";
+    if(lifespanCount == undefined) 
+    {
+      client.set('myWord', null);//reset the word
+      responseText += " No more attempts ";
+    }
+    else 
+       responseText += " You have " + lifespanCount + "attempts";
+    return res.json({
+              fulfillmentText:   responseText
+          });
+}
+
 server.post('/get-cows-and-bulls', (req, res) => {
 
   //console.log(req.body.queryResult.queryText);
@@ -79,7 +115,15 @@ server.post('/get-cows-and-bulls', (req, res) => {
 	}
   
 let saidWord = req.body.queryResult.parameters.theword;
-  
+if(saidWord.length != lengthOfWord)  
+{
+    responseText  = saidword + " is not a " + lengthOfWord + " letter word"  
+    responseText += " You have " + lifespanCount + "attempts";
+    return res.json({
+         
+        fulfillmentText:  responseText         
+    });
+}
 let myWord = "ERR" 
 myWord = client.get('myWord', function (error, result) {
     if (error || (result ==  null)) {
@@ -96,94 +140,15 @@ myWord = client.get('myWord', function (error, result) {
        console.log("My already set word is " + myWord)
     }
 
-    return myWord;
+    return processWords(myWord, saidWord, lifespanCount,res)
+     
 });
 
 //let myWord = arrayOf3letterWords[Math.floor(Math.random() * 10)];     // returns a random integer from 0 to 9]
-  console.log(myWord, saidWord);
-  myWord = myWord.toUpperCase();
-  saidWord = saidWord.toUpperCase();
-  //check if it is the same word
-  if(myWord.indexOf(saidWord) == 0) {
-    client.set('myWord', null); //reset the word
-	 return res.json({
-            //speech: 'Something went wrong!!!',
-           // displayText: 'Something went wrong!',
-            //source: 'get-cows-and-bulls',
-			fulfillmentText: myWord + " is right. If you want to play again, say the number of letters ",
-			"outputContexts": [
-			{
-			  "name": myContext,
-			  "lifespanCount": 0 //end game.
-			   
-			}
-		  ]
-			 
-					
-			
-        }); 
-    } 
-  var responseText = "" ;
-  if(saidWord.length != lengthOfWord) 
-  {
-	  responseText = saidWord + " is not a " + lengthOfWord + " word. " ;
-	 
-  }
-  else
-  {
-       //calculate cows and bulls.
-       const [bulls, cows] = calculateCowAndBull(myWord, saidWord);
-       responseText = saidWord + " has " + bulls + " bulls and " + cows + " cows ";
-  }
-
-  
-  if(lifespanCount == undefined) 
-  {
-    client.set('myWord', null);//reset the word
-    responseText += " No more attempts ";
-  }
-  else 
-     responseText += " You have " + lifespanCount + "attempts";
-  return res.json({
-            //speech: 'Something went wrong!!!',
-           // displayText: 'Something went wrong!',
-            //source: 'get-cows-and-bulls',
-			fulfillmentText:   responseText
-			 
-		 
-			
-        });
+ 
     
-    const movieToSearch = req.body.result && req.body.result.parameters && req.body.result.parameters.movie ? req.body.result.parameters.movie : 'The Godfather';
-    const reqUrl = encodeURI(`http://www.omdbapi.com/?t=${movieToSearch}&apikey=${API_KEY}`);
-    console.log(movieToSearch);
-    console.log(reqUrl);
-    http.get(reqUrl, (responseFromAPI) => {
-        let completeResponse = '';
-        responseFromAPI.on('data', (chunk) => {
-            completeResponse += chunk;
-        });
-        responseFromAPI.on('end', () => {
-            const movie = JSON.parse(completeResponse);
-            let dataToSend = movieToSearch === 'The Godfather' ? `I don't have the required info on that. Here's some info on 'The Godfather' instead.\n` : '';
-            dataToSend += `${movie.Title} is a ${movie.Actors} starer ${movie.Genre} movie, released in ${movie.Year}. It was directed by ${movie.Director}`;
-
-            return res.json({
-                speech: dataToSend,
-                displayText: dataToSend,
-                source: 'get-cows-and-bulls',
-				fulfillmentText : "Thats right"
-            });
-        });
-    }, (error) => {
-        return res.json({
-            speech: 'Something went wrong!!!',
-            displayText: 'Something went wrong!',
-            source: 'get-cows-and-bulls',
-			fulfillmentText: "Wrong"
-			
-        });
-    });
+     
+    
 });
 
 server.listen((process.env.PORT || 8000), () => {
