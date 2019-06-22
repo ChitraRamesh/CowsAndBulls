@@ -137,7 +137,7 @@ myWord = client.get('myWord', function (error, result) {
   }
 
   
-  if(lifespanCount == 0) 
+  if(lifespanCount == undefined) 
   {
     client.set('myWord', null);//reset the word
     responseText += " No more attempts ";
