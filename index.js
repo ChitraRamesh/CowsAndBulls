@@ -81,13 +81,14 @@ server.post('/get-cows-and-bulls', (req, res) => {
 let saidWord = req.body.queryResult.parameters.theword;
   
 let myWord = "ERR" 
-client.get('myWord', function (error, result) {
+myWord = client.get('myWord', function (error, result) {
     if (error || (result ==  null)) {
        //word not set yet
        // returns a random integer from 0 to 9]
-       let myWord = arrayOf3letterWords[Math.floor(Math.random() * 10)];           
+       myWord = arrayOf3letterWords[Math.floor(Math.random() * 10)];           
        client.set('myWord', myWord);
        console.log("My new word is " + myWord)
+       
     }
     else
     {
@@ -95,11 +96,13 @@ client.get('myWord', function (error, result) {
        console.log("My already set word is " + myWord)
     }
 
-     
+    return myWord;
 });
 
 //let myWord = arrayOf3letterWords[Math.floor(Math.random() * 10)];     // returns a random integer from 0 to 9]
   console.log(myWord, saidWord);
+  myWord = myWord.toUpperCase();
+  saidWord = saidWord.toUpperCase();
   //check if it is the same word
   if(myWord.indexOf(saidWord) == 0) {
     client.set('myWord', null); //reset the word
