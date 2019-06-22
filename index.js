@@ -5,6 +5,17 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
 
+var arrayOf3letterWords = [ "pig", 'hit','yet','new','loo','met','shy','run','zoo','fox']
+var arrayOf4letterWords = [ 'post','news',"yelp","glee","mood",'slid','rude','gawk','slow','mind']
+var client = require('redis').createClient(process.env.REDIS_URL);
+
+client.on('connect', function() {
+    console.log('Redis client connected');
+});
+client.on('error', function (err) {
+    console.log('Something went wrong with ReDis ' + err);
+});
+
 
 const server = express();
 server.use(bodyParser.urlencoded({
@@ -15,6 +26,39 @@ server.use(bodyParser.json());
 
 
 
+ 
+
+calculateCowAndBull = (word, saidWord) => {
+    //convert words into arrays.
+    //iterate thru word and match for saidword
+
+    var arr_word = word.toUppercase().split('')
+    var arr_saidWord = saidWord.toUpperCase().split('')
+    var bull = 0;
+    var cow = 0;
+
+
+    for(i = 0; i < saidWord.length; i++) {
+        var cowfound = false;
+        for(j = 0; j < word.length; j++) {
+            if(arr_word[i] == arr_saidWord[j]) {
+                if(i == j) //same position
+                {
+                bull++; 
+                cowfound = false;
+                break; 
+                }
+                else {
+                cowfound = true;
+                }
+                
+            }
+                
+        }
+    if (cowfound) cow++;  
+
+    }
+}
 server.post('/get-cows-and-bulls', (req, res) => {
 
   //console.log(req.body.queryResult.queryText);
@@ -26,7 +70,8 @@ server.post('/get-cows-and-bulls', (req, res) => {
   var lifespanCount = 0;
   var lengthOfWord = 0;
   var i;
- for (i = 0; i < countOfContexts; i++) { 
+  //get the information about the context so that it can be used when sending the response.
+  for (i = 0; i < countOfContexts; i++) { 
 		if(req.body.queryResult.outputContexts[i].name.indexOf(myContext) > 1)
 		{
 				myContext = req.body.queryResult.outputContexts[i].name;
@@ -37,7 +82,24 @@ server.post('/get-cows-and-bulls', (req, res) => {
 	}
   
   let saidWord = req.body.queryResult.parameters.theword;
-  let myWord = "pig";
+  
+ 
+client.get('myWord', function (error, result) {
+    if (error) {
+       //word not set yet
+       // // returns a random integer from 0 to 9]
+       let myWord = arrayOf3letterWords[Math.floor(Math.random() * 10)];   
+        
+       client.set('myWord', myWord, redis.print);
+    }
+    else
+       myWord = result;
+     
+});
+
+//let myWord = arrayOf3letterWords[Math.floor(Math.random() * 10)];     // returns a random integer from 0 to 9]
+
+  //check if it is the same word
   if(myWord.indexOf(saidWord) == 0)
 	 return res.json({
             //speech: 'Something went wrong!!!',
@@ -55,18 +117,19 @@ server.post('/get-cows-and-bulls', (req, res) => {
 					
 			
         });  
-  var responseText =  saidWord + " is Wrong"
+  var responseText = "" ;
   if(saidWord.length != lengthOfWord) 
   {
-	  responseText = saidWord + " is not a " + lengthOfWord + " word. Try again. You have " + lifespanCount + "attempts";
+	  responseText = saidWord + " is not a " + lengthOfWord + " word. " ;
 	 
   }
   else
   {
-	   //calculate cows and bulls.
-	   
+       //calculate cows and bulls.
+       result [bulls, cows]= calculateCowAndBull(myWord, saidWord);
+       responseText = saidWord + " has " + result[bulls] + " bulls and " + result[cows] + " cows ";
   }
-  
+  responseText += " Try again. You have " + lifespanCount + "attempts";
   return res.json({
             //speech: 'Something went wrong!!!',
            // displayText: 'Something went wrong!',

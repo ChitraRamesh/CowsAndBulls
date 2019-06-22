@@ -4,7 +4,7 @@
   "description": "TestApp",
   "main": "index.js",
   "scripts": {
-     "test": "echo \"Error: no Cowbull test specified\" && exit 1"
+    "start": "node index.js"
   },
   "author": "Chitra",
   "engines": {
@@ -13,10 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
-    "express": "^4.17.1"
-  },
-  "scripts": {
-    "start": "node index.js"
-}
-  
+    "express": "^4.17.1",
+    "redis": "^2.8.0"
+  }
 }
