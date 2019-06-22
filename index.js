@@ -130,8 +130,8 @@ client.get('myWord', function (error, result) {
   else
   {
        //calculate cows and bulls.
-       var result [bulls, cows]= calculateCowAndBull(myWord, saidWord);
-       responseText = saidWord + " has " + result[bulls] + " bulls and " + result[cows] + " cows ";
+       const [bulls, cows] = calculateCowAndBull(myWord, saidWord);
+       responseText = saidWord + " has " + bulls + " bulls and " + cows + " cows ";
   }
   responseText += " Try again. You have " + lifespanCount + "attempts";
   return res.json({
