@@ -129,8 +129,11 @@ myWord = client.get('myWord', function (error, result) {
     if (error || (result ==  null)) {
        //word not set yet
        // returns a random integer from 0 to 9]
-       
-       myWord = arrayOf3letterWords[Math.floor(Math.random() * 10)];           
+       myWord = "test"
+       if(lengthOfWord == 3)
+             myWord = arrayOf3letterWords[Math.floor(Math.random() * 10)];   
+       if(lengthOfword == 4)     
+            myWord = arrayOf4letterWords[Math.floor(Math.random() * 10)];     
        client.set('myWord', myWord);
        console.log("My new word is " + myWord)
        
@@ -153,5 +156,8 @@ myWord = client.get('myWord', function (error, result) {
 });
 
 server.listen((process.env.PORT || 8000), () => {
+    client.flushall('ASYNC',  function (err, succeeded) {
+        console.log("Clearing Redis " + succeeded); // will be true if successfull
+    });
     console.log("Cows and bulls Server is up and running...");
 });
