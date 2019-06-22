@@ -63,7 +63,7 @@ processWords = (myWord, saidWord, lifespanCount,myContext, res) => {
     saidWord = saidWord.toUpperCase();
     //check if it is the same word
     if(myWord.indexOf(saidWord) == 0) {
-      client.set('myWord', null); //reset the word
+      client.del('myWord'); //reset the word
        return res.json({
               fulfillmentText: myWord + " is right. If you want to play again, say the number of letters ",
               "outputContexts": [
@@ -82,7 +82,7 @@ processWords = (myWord, saidWord, lifespanCount,myContext, res) => {
     responseText = saidWord + " has " + bulls + " bulls and " + cows + " cows ";
     if(lifespanCount == undefined) 
     {
-      client.set('myWord', null);//reset the word
+      client.del('myWord');//reset the word
       responseText += " No more attempts ";
     }
     else 
@@ -129,6 +129,7 @@ myWord = client.get('myWord', function (error, result) {
     if (error || (result ==  null)) {
        //word not set yet
        // returns a random integer from 0 to 9]
+       
        myWord = arrayOf3letterWords[Math.floor(Math.random() * 10)];           
        client.set('myWord', myWord);
        console.log("My new word is " + myWord)
