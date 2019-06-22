@@ -85,7 +85,7 @@ let saidWord = req.body.queryResult.parameters.theword;
   
 let myWord = "ERR" 
 client.get('myWord', function (error, result) {
-    if (error) {
+    if (error || (result ==  null)) {
        //word not set yet
        // returns a random integer from 0 to 9]
        let myWord = arrayOf3letterWords[Math.floor(Math.random() * 10)];           
@@ -130,7 +130,7 @@ client.get('myWord', function (error, result) {
   else
   {
        //calculate cows and bulls.
-       result [bulls, cows]= calculateCowAndBull(myWord, saidWord);
+       var result [bulls, cows]= calculateCowAndBull(myWord, saidWord);
        responseText = saidWord + " has " + result[bulls] + " bulls and " + result[cows] + " cows ";
   }
   responseText += " Try again. You have " + lifespanCount + "attempts";
