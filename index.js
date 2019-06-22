@@ -24,10 +24,6 @@ server.use(bodyParser.urlencoded({
 
 server.use(bodyParser.json());
 
-
-
- 
-
 calculateCowAndBull = (word, saidWord) => {
     //convert words into arrays.
     //iterate thru word and match for saidword
@@ -58,6 +54,7 @@ calculateCowAndBull = (word, saidWord) => {
     if (cowfound) cow++;  
 
     }
+    return [bull, cow];
 }
 server.post('/get-cows-and-bulls', (req, res) => {
 
