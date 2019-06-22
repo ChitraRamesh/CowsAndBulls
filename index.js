@@ -57,7 +57,7 @@ calculateCowAndBull = (word, saidWord) => {
     return [bull, cow];
 }
 
-processWords = (myWord, saidWord, lifespanCount, res) => {
+processWords = (myWord, saidWord, lifespanCount,myContext, res) => {
     console.log(myWord, saidWord);
     myWord = myWord.toUpperCase();
     saidWord = saidWord.toUpperCase();
@@ -140,7 +140,7 @@ myWord = client.get('myWord', function (error, result) {
        console.log("My already set word is " + myWord)
     }
 
-    return processWords(myWord, saidWord, lifespanCount,res)
+    return processWords(myWord, saidWord, lifespanCount,myContext,res)
      
 });
 
