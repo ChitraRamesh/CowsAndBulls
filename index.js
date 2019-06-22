@@ -117,7 +117,7 @@ server.post('/get-cows-and-bulls', (req, res) => {
 let saidWord = req.body.queryResult.parameters.theword;
 if(saidWord.length != lengthOfWord)  
 {
-    responseText  = saidword + " is not a " + lengthOfWord + " letter word"  
+    responseText  = saidWord + " is not a " + lengthOfWord + " letter word"  
     responseText += " You have " + lifespanCount + "attempts";
     return res.json({
          
