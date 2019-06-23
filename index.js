@@ -132,7 +132,7 @@ myWord = client.get('myWord', function (error, result) {
        myWord = "test"
        if(lengthOfWord == 3)
              myWord = arrayOf3letterWords[Math.floor(Math.random() * 10)];   
-       if(lengthOfword == 4)     
+       if(lengthOfWord == 4)     
             myWord = arrayOf4letterWords[Math.floor(Math.random() * 10)];     
        client.set('myWord', myWord);
        console.log("My new word is " + myWord)
