@@ -60,7 +60,8 @@ calculateCowAndBull = (word, saidWord) => {
     return [bull, cow];
 }
 
-processWords = (sessionId, myWord, saidWord, lifespanCount,myContext, res) => {
+
+processWords = (sessionId, myWord, saidWord,result, lifespanCount,myContext, res) => {
     console.log(myWord, saidWord);
     myWord = myWord.toUpperCase();
     saidWord = saidWord.toUpperCase();
@@ -83,6 +84,9 @@ processWords = (sessionId, myWord, saidWord, lifespanCount,myContext, res) => {
     //calculate cows and bulls.
     const [bulls, cows] = calculateCowAndBull(myWord, saidWord);
     responseText = saidWord + " has " + bulls + " bulls and " + cows + " cows ";
+    client.mset(sessionId,myWord + " " +  result + " " + responseText); //keep adding to cache for later hint retrieval
+    //Add it for Hint retrival
+   // client.
     if(lifespanCount == undefined) 
     {
       client.del(sessionId);//reset the word
@@ -103,23 +107,45 @@ server.post('/get-cows-and-bulls', (req, res) => {
   //get the context readyState
   let countOfContexts = req.body.queryResult.outputContexts.length;
   let sessionId = req.body.session
-  let myContext  = "sayletter-followup";
+  let sayLetterContext  = "sayletter-followup";
+  let repeatContext = "repeat";
   var lifespanCount = 0;
   var lengthOfWord = 0;
   var i;
+  var supportedContext = false;
+  var myContext = "";
   //get the information about the context so that it can be used when sending the response.
   for (i = 0; i < countOfContexts; i++) { 
-		if(req.body.queryResult.outputContexts[i].name.indexOf(myContext) > 1)
+		if(req.body.queryResult.outputContexts[i].name.indexOf(sayLetterContext) > 1)
 		{
 				myContext = req.body.queryResult.outputContexts[i].name;
 				lifespanCount = req.body.queryResult.outputContexts[i].lifespanCount;
-				lengthOfWord = req.body.queryResult.outputContexts[i].parameters.lengthOfword;
+                lengthOfWord = req.body.queryResult.outputContexts[i].parameters.lengthOfword;
+                supportedContext = true;
 				break;
-		}
-	}
-  
+        }
+
+        if(req.body.queryResult.outputContexts[i].name.indexOf(repeatContext) > 1)
+		{
+				myContext = req.body.queryResult.outputContexts[i].name;
+				lifespanCount = req.body.queryResult.outputContexts[i].lifespanCount;
+                lengthOfWord = req.body.queryResult.outputContexts[i].parameters.lengthOfword;
+                supportedContext = true;
+				break;
+        }
+
+        
+    }
+  if(!supportedContext)
+      {
+        return res.json({
+            fulfillmentText:   "Don't know what you are saying "
+        });
+      }
+
+
 let saidWord = req.body.queryResult.parameters.theword;
-if(saidWord.length != lengthOfWord)  
+if(saidWord.length != lengthOfWord && myContext != repeatContext)  
 {
     responseText  = saidWord + " is not a " + lengthOfWord + " letter word"  
     responseText += " You have " + lifespanCount + "attempts";          
@@ -132,6 +158,14 @@ let myWord = "ERR"
 myWord = client.get(sessionId, function (error, result) {
     if (error || (result ==  null)) {
        //word not set yet
+       if (myContext == repeatContext)  
+       {
+        return res.json({
+         
+            fulfillmentText:  "No words yet"     
+        });
+       }   
+
        // returns a random integer from 0 to 9]
        myWord = "test"
        if(lengthOfWord == 3)
@@ -139,16 +173,26 @@ myWord = client.get(sessionId, function (error, result) {
        if(lengthOfWord == 4)     
             myWord = arrayOf4letterWords[Math.floor(Math.random() * 10)];     
        client.set(sessionId, myWord);
-       console.log("My new word is " + myWord)
+       console.log("My new word is " + myWord);
+       result = myWord;
        
     }
     else
     {
+       //result has both the word and all the clues so far.
+       //get just the word/   
+       result =    result.slice(0,lengthOfWord -1);   
        myWord = result;
        console.log("My already set word is " + myWord)
     }
-
-    return processWords(sessionId, myWord, saidWord, lifespanCount,myContext,res)
+    if (myContext == repeatContext)  
+    {
+        return res.json({
+         
+            fulfillmentText:  result
+        });
+    }   
+    return processWords(sessionId, myWord, saidWord, result, lifespanCount,myContext,res)
      
 });
    
