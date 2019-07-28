@@ -84,7 +84,7 @@ processWords = (sessionId, myWord, saidWord,result, lifespanCount,myContext, res
     //calculate cows and bulls.
     const [bulls, cows] = calculateCowAndBull(myWord, saidWord);
     responseText = saidWord + " has " + bulls + " bulls and " + cows + " cows ";
-    client.mset(sessionId,myWord + " " +  result + " " + responseText); //keep adding to cache for later hint retrieval
+    client.mset(sessionId,myWord + "## " +  result + " " + responseText); //keep adding to cache for later hint retrieval
     //Add it for Hint retrival
    // client.
     if(lifespanCount == undefined) 
@@ -127,9 +127,7 @@ server.post('/get-cows-and-bulls', (req, res) => {
 
         if(req.body.queryResult.outputContexts[i].name.indexOf(repeatContext) > 1)
 		{
-				myContext = req.body.queryResult.outputContexts[i].name;
-				lifespanCount = req.body.queryResult.outputContexts[i].lifespanCount;
-                lengthOfWord = req.body.queryResult.outputContexts[i].parameters.lengthOfword;
+				myContext = req.body.queryResult.outputContexts[i].name;		
                 supportedContext = true;
 				break;
         }
@@ -145,7 +143,7 @@ server.post('/get-cows-and-bulls', (req, res) => {
 
 
 let saidWord = req.body.queryResult.parameters.theword;
-if(saidWord.length != lengthOfWord && myContext != repeatContext)  
+if(myContext != repeatContext && saidWord.length != lengthOfWord )  
 {
     responseText  = saidWord + " is not a " + lengthOfWord + " letter word"  
     responseText += " You have " + lifespanCount + "attempts";          
@@ -180,8 +178,8 @@ myWord = client.get(sessionId, function (error, result) {
     else
     {
        //result has both the word and all the clues so far.
-       //get just the word/   
-       result =    result.slice(0,lengthOfWord -1);   
+       //get just the word . it is separated by ##
+       result =   result.slice(0, result.indexOf("##",0) );
        myWord = result;
        console.log("My already set word is " + myWord)
     }
