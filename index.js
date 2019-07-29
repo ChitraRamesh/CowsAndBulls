@@ -113,6 +113,7 @@ server.post('/get-cows-and-bulls', (req, res) => {
   var lengthOfWord = 0;
   var i;
   var supportedContext = false;
+  var displayHelp = false;
   var myContext = "";
   //get the information about the context so that it can be used when sending the response.
   for (i = 0; i < countOfContexts; i++) { 
@@ -129,6 +130,8 @@ server.post('/get-cows-and-bulls', (req, res) => {
 		{
 				myContext = req.body.queryResult.outputContexts[i].name;		
                 supportedContext = true;
+                //console.log(myContext + "  " + repeatContext);
+                displayHelp = true;
 				break;
         }
 
@@ -143,7 +146,8 @@ server.post('/get-cows-and-bulls', (req, res) => {
 
 
 let saidWord = req.body.queryResult.parameters.theword;
-if(myContext != repeatContext )
+
+if(!displayHelp )
 {
     if(saidWord.length != lengthOfWord )  
     {
@@ -159,7 +163,7 @@ let myWord = "ERR"
 myWord = client.get(sessionId, function (error, result) {
     if (error || (result ==  null)) {
        //word not set yet
-       if (myContext == repeatContext)  
+       if (displayHelp)  
        {
         return res.json({
          
@@ -186,7 +190,7 @@ myWord = client.get(sessionId, function (error, result) {
        myWord = result;
        console.log("My already set word is " + myWord)
     }
-    if (myContext == repeatContext)  
+    if (displayHelp)  
     {
         return res.json({
          
