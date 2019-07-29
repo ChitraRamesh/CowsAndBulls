@@ -84,7 +84,9 @@ processWords = (sessionId, myWord, saidWord,result, lifespanCount,myContext, res
     //calculate cows and bulls.
     const [bulls, cows] = calculateCowAndBull(myWord, saidWord);
     responseText = saidWord + " has " + bulls + " bulls and " + cows + " cows ";
-    client.mset(sessionId,myWord + "## " +  result + " " + responseText); //keep adding to cache for later hint retrieval
+    var toBeStored = myWord + "## " +  result + " " + responseText
+    client.mset(sessionId,toBeStored); //keep adding to cache for later hint retrieval
+    console.log(toBeStored)
     //Add it for Hint retrival
    // client.
     if(lifespanCount == undefined) 
@@ -117,6 +119,7 @@ server.post('/get-cows-and-bulls', (req, res) => {
   var myContext = "";
   //get the information about the context so that it can be used when sending the response.
   for (i = 0; i < countOfContexts; i++) { 
+        console.log(req.body.queryResult.outputContexts[i].name)
 		if(req.body.queryResult.outputContexts[i].name.indexOf(sayLetterContext) > 1)
 		{
 				myContext = req.body.queryResult.outputContexts[i].name;
@@ -130,7 +133,7 @@ server.post('/get-cows-and-bulls', (req, res) => {
 		{
 				myContext = req.body.queryResult.outputContexts[i].name;		
                 supportedContext = true;
-                //console.log(myContext + "  " + repeatContext);
+                console.log(myContext + "  " + repeatContext);
                 displayHelp = true;
 				break;
         }
@@ -186,9 +189,12 @@ myWord = client.get(sessionId, function (error, result) {
     {
        //result has both the word and all the clues so far.
        //get just the word . it is separated by ##
-       result =   result.slice(0, result.indexOf("##",0) );
-       myWord = result;
+       console.log("From Db" + result);
+       
+       myWord = result.slice(0, result.indexOf("##",0) );
+       result =  result.slice(  result.indexOf("##",0) + 2 , result.length); 
        console.log("My already set word is " + myWord)
+       console.log("saved content " + result);
     }
     if (displayHelp)  
     {
