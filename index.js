@@ -83,7 +83,7 @@ processWords = (sessionId, myWord, saidWord,result, lifespanCount,myContext, res
  
     //calculate cows and bulls.
     const [bulls, cows] = calculateCowAndBull(myWord, saidWord);
-    responseText = saidWord + " has " + bulls + " bulls and " + cows + " cows ";
+    responseText = saidWord + " has " + bulls + " bulls and " + cows + " cows.";
     var toBeStored = myWord + "## " +  result + " " + responseText
     client.mset(sessionId,toBeStored); //keep adding to cache for later hint retrieval
     console.log(toBeStored)
@@ -94,8 +94,8 @@ processWords = (sessionId, myWord, saidWord,result, lifespanCount,myContext, res
       client.del(sessionId);//reset the word
       responseText += " No more attempts ";
     }
-    else 
-       responseText += " You have " + lifespanCount + "attempts";
+    //else 
+     //  responseText += " "; //" You have " + lifespanCount + "attempts";
     return res.json({
               fulfillmentText:   responseText
           });
@@ -119,7 +119,7 @@ server.post('/get-cows-and-bulls', (req, res) => {
   var myContext = "";
   //get the information about the context so that it can be used when sending the response.
   for (i = 0; i < countOfContexts; i++) { 
-        console.log(req.body.queryResult.outputContexts[i].name)
+        //console.log(req.body.queryResult.outputContexts[i].name)
 		if(req.body.queryResult.outputContexts[i].name.indexOf(sayLetterContext) > 1)
 		{
 				myContext = req.body.queryResult.outputContexts[i].name;
@@ -155,7 +155,7 @@ if(!displayHelp )
     if(saidWord.length != lengthOfWord )  
     {
         responseText  = saidWord + " is not a " + lengthOfWord + " letter word"  
-        responseText += " You have " + lifespanCount + "attempts";          
+        //responseText += " You have " + lifespanCount + "attempts";          
         return res.json({
             
             fulfillmentText:  responseText         
@@ -189,7 +189,7 @@ myWord = client.get(sessionId, function (error, result) {
     {
        //result has both the word and all the clues so far.
        //get just the word . it is separated by ##
-       console.log("From Db" + result);
+      // console.log("From Db" + result);
        
        myWord = result.slice(0, result.indexOf("##",0) );
        result =  result.slice(  result.indexOf("##",0) + 2 , result.length); 
