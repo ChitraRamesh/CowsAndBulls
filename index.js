@@ -143,14 +143,17 @@ server.post('/get-cows-and-bulls', (req, res) => {
 
 
 let saidWord = req.body.queryResult.parameters.theword;
-if(myContext != repeatContext && saidWord.length != lengthOfWord )  
+if(myContext != repeatContext )
 {
-    responseText  = saidWord + " is not a " + lengthOfWord + " letter word"  
-    responseText += " You have " + lifespanCount + "attempts";          
-    return res.json({
-         
-        fulfillmentText:  responseText         
-    });
+    if(saidWord.length != lengthOfWord )  
+    {
+        responseText  = saidWord + " is not a " + lengthOfWord + " letter word"  
+        responseText += " You have " + lifespanCount + "attempts";          
+        return res.json({
+            
+            fulfillmentText:  responseText         
+        });
+    }
 }
 let myWord = "ERR" 
 myWord = client.get(sessionId, function (error, result) {
