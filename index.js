@@ -182,7 +182,7 @@ myWord = client.get(sessionId, function (error, result) {
             myWord = arrayOf4letterWords[Math.floor(Math.random() * 10)];     
        client.set(sessionId, myWord);
        console.log("My new word is " + myWord);
-       result = myWord;
+       result = "";
        
     }
     else
