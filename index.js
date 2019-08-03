@@ -5,8 +5,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
 
-var arrayOf3letterWords = [ "pig","sum","red" ,"kid", 'hit','yet','new','loo','met','shy','run','zoo','fox']
-var arrayOf4letterWords = [ 'post',"love",'news',"lick","yelp","glee","mood",'slid','rude','gawk','slow','mind']
+var arrayOf3letterWords = [ "pig","sum","red" ,"spy","kid",'ape','hot',"gas","sit","now" ,'hit','yet',"gym","men","bow","sat","tie",
+"saw", 'new','loo','met','shy','run','zoo','fox']
+var arrayOf4letterWords = [ 'post',"love",'news',"lick","yelp","glee","glue","mood",'slid','rude','gawk','slow','mind',"lift","jump"]
 var client = require('redis').createClient(process.env.REDIS_URL);
 //index for the data separated by ##
 var seperator = "##"
@@ -217,7 +218,7 @@ myWord = client.get(sessionId, function (error, result) {
        // returns a random integer from 0 to 9]
        myWord = "test"
        if(lengthOfWord == 3)
-             myWord = arrayOf3letterWords[Math.floor(Math.random() * 10)];   
+             myWord = arrayOf3letterWords[Math.floor(Math.random() * 20)];   
        if(lengthOfWord == 4)     
             myWord = arrayOf4letterWords[Math.floor(Math.random() * 10)];     
        client.set(sessionId, myWord);
