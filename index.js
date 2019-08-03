@@ -5,9 +5,17 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
 
-var arrayOf3letterWords = [ "pig", 'hit','yet','new','loo','met','shy','run','zoo','fox']
-var arrayOf4letterWords = [ 'post','news',"yelp","glee","mood",'slid','rude','gawk','slow','mind']
+var arrayOf3letterWords = [ "pig","sum","red" ,"kid", 'hit','yet','new','loo','met','shy','run','zoo','fox']
+var arrayOf4letterWords = [ 'post',"love",'news',"lick","yelp","glee","mood",'slid','rude','gawk','slow','mind']
 var client = require('redis').createClient(process.env.REDIS_URL);
+//index for the data separated by ##
+var seperator = "##"
+var iWord = 0
+var iAttempt = 1
+var iHintsAsked = 2
+var iNoCowsBulls = 3
+var iAllResponse = 4
+
 
 client.on('connect', function() {
     console.log('Redis client connected');
@@ -90,15 +98,15 @@ processWords = (sessionId, myWord, saidWord,result, lifespanCount,myContext, res
           //add the data as a group
           if(result.length > 0)
             {
-                parsedResult = result.split("##");
+                parsedResult = result.split(seperator);
                 
                 parsedResult [0] += ", " + saidWord;
-                result = parsedResult[0] + "##" + parsedResult[1];
+                result = parsedResult[0] + seperator + parsedResult[1];
                 console.log("result with 0 ", result)
             }
           else //this is the first results
            {
-                result = saidWord + "##" + ""
+                result = saidWord + seperator + ""
                 console.log("first result ", result)
            }
       }
@@ -134,7 +142,8 @@ server.post('/get-cows-and-bulls', (req, res) => {
 
   //console.log(req.body.queryResult.queryText);
   console.log(req.body.queryResult.outputContexts[0].name);
-  
+  console.log(req.body.queryResult.action);
+  let action = req.body.queryResult.action;
   //get the context readyState
   let countOfContexts = req.body.queryResult.outputContexts.length;
   let sessionId = req.body.session
@@ -169,6 +178,13 @@ server.post('/get-cows-and-bulls', (req, res) => {
 
         
     }
+
+    if(action.indexOf("Giveup") == 0)
+     {
+        return res.json({
+            fulfillmentText:   "Ok. We will end the game now "
+        });
+     }
   if(!supportedContext)
       {
         return res.json({
@@ -220,14 +236,14 @@ myWord = client.get(sessionId, function (error, result) {
        //get just the word . it is separated by ##
       // console.log("From Db" + result);
        
-       myWord = result.slice(0, result.indexOf("##",0) );
-       result =  result.slice(  result.indexOf("##",0) + 2 , result.length); 
+       myWord = result.slice(0, result.indexOf(seperator,0) );
+       result =  result.slice(  result.indexOf(seperator,0) + 2 , result.length); 
        console.log("My already set word is " + myWord)
        console.log("saved content " + result);
     }
     if (displayHelp)  
     {
-        var parsedText = result.split("##");
+        var parsedText = result.split(seperator);
         if(parsedText.length > 1) //  words with no cows and bulls
         {
             result = parsedText[0] + " has no cows or bulls. " + parsedText[1];
