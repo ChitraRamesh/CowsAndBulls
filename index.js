@@ -242,7 +242,10 @@ myWord = client.get(sessionId, function (error, result) {
 
         if(parsedText.length > 1) //  words with no cows and bulls
         {
-            result = parsedText[0] + " has no cows or bulls. " +  parsedText[1];
+            if(parsedText[0].trim().length > 0)
+                result = parsedText[0] + " has no cows or bulls. " +  parsedText[1];
+            else
+                result = parsedText[1];
         }
 
         return res.json({
