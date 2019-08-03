@@ -91,6 +91,7 @@ processWords = (sessionId, myWord, saidWord,result, lifespanCount,myContext, res
           if(result.length > 0)
             {
                 parsedResult = result.split("##");
+                
                 parsedResult [0] += ", " + saidWord;
                 result = parsedResult[0] + "##" + parsedResult[1];
                 console.log("result with 0 ", result)
@@ -103,7 +104,12 @@ processWords = (sessionId, myWord, saidWord,result, lifespanCount,myContext, res
       }
       else
       {
-          result =  result + " " + responseText;
+        if(result.length == 0)  
+        {
+            //strtring new . add space for no cow/bull words
+            result = " ## ";
+        }
+        result =  result + " " + responseText;
           console.log("result ", result)
       }
     
