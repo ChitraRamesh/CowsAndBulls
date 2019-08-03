@@ -195,12 +195,24 @@ if(!displayHelp )
 {
     if(saidWord.length != lengthOfWord )  
     {
-        responseText  = saidWord + " is not a " + lengthOfWord + " letter word"  
-        //responseText += " You have " + lifespanCount + "attempts";          
-        return res.json({
-            
-            fulfillmentText:  responseText         
-        });
+        //maybe the user spelled out the word. 
+        var parsedWord = saidWord.split(" ");
+        if(parsedWord.length == 3)
+        {
+            if(parsedWord[0].length == 1 && parsedWord[1].length == 1 && parsedWord[2].length == 1)
+            {
+                saidWord = parsedWord[0]+parsedWord[1]+parsedWord[2];
+            }
+        }
+        else 
+        {
+            responseText  = saidWord + " is not a " + lengthOfWord + " letter word"  
+            //responseText += " You have " + lifespanCount + "attempts";          
+            return res.json({
+                
+                fulfillmentText:  responseText         
+            });
+        }
     }
 }
 let myWord = "ERR" 
