@@ -179,12 +179,7 @@ server.post('/get-cows-and-bulls', (req, res) => {
         
     }
 
-    if(action.indexOf("Giveup") == 0)
-     {
-        return res.json({
-            fulfillmentText:   "Ok. We will end the game now "
-        });
-     }
+   
   if(!supportedContext)
       {
         return res.json({
@@ -244,16 +239,23 @@ myWord = client.get(sessionId, function (error, result) {
     if (displayHelp)  
     {
         var parsedText = result.split(seperator);
+
         if(parsedText.length > 1) //  words with no cows and bulls
         {
-            result = parsedText[0] + " has no cows or bulls. " + parsedText[1];
+            result = parsedText[0] + " has no cows or bulls. " +  parsedText[1];
         }
 
         return res.json({
          
-            fulfillmentText:  result
+            fulfillmentText:  "Here are the words you tried so far. " + result
         });
-    }   
+    } 
+    if(action.indexOf("Giveup") == 0)
+    {
+       return res.json({
+           fulfillmentText:   "Ok. We will end the game now. " +  " The word is " + myWord
+       });
+    }  
     return processWords(sessionId, myWord, saidWord, result, lifespanCount,myContext,res)
      
 });
