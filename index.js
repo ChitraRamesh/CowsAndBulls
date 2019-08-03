@@ -84,7 +84,30 @@ processWords = (sessionId, myWord, saidWord,result, lifespanCount,myContext, res
     //calculate cows and bulls.
     const [bulls, cows] = calculateCowAndBull(myWord, saidWord);
     responseText = saidWord + " has " + bulls + " bulls and " + cows + " cows.";
-    var toBeStored = myWord + "## " +  result + " " + responseText
+    //var toBeStored = "";
+    if(bulls == 0 && cows == 0)
+      {
+          //add the data as a group
+          if(result.length > 0)
+            {
+                parsedResult = result.split("##");
+                parsedResult [0] += ", " + saidWord;
+                result = parsedResult[0] + "##" + parsedResult[1];
+                console.log("result with 0 ", result)
+            }
+          else //this is the first results
+           {
+                result = saidWord + "##" + ""
+                console.log("first result ", result)
+           }
+      }
+      else
+      {
+          result =  result + " " + responseText;
+          console.log("result ", result)
+      }
+    
+    var toBeStored = myWord + "## " + result;
     client.mset(sessionId,toBeStored); //keep adding to cache for later hint retrieval
     console.log(toBeStored)
     //Add it for Hint retrival
@@ -187,7 +210,7 @@ myWord = client.get(sessionId, function (error, result) {
     }
     else
     {
-       //result has both the word and all the clues so far.
+       //result has both the word and all the clues so far separated by ##
        //get just the word . it is separated by ##
       // console.log("From Db" + result);
        
@@ -198,6 +221,12 @@ myWord = client.get(sessionId, function (error, result) {
     }
     if (displayHelp)  
     {
+        var parsedText = result.split("##");
+        if(parsedText.length > 1) //  words with no cows and bulls
+        {
+            result = parsedText[0] + " has no cows or bulls. " + parsedText[1];
+        }
+
         return res.json({
          
             fulfillmentText:  result
