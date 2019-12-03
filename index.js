@@ -135,7 +135,7 @@ processWords = (sessionId, myWord, saidWord,result, lifespanCount,myContext, res
     //else 
      //  responseText += " "; //" You have " + lifespanCount + "attempts";
     return res.json({
-              fulfillmentText:   responseText
+              fulfillmentText:   responseText + "Try again "
           });
 }
 
@@ -184,7 +184,7 @@ server.post('/get-cows-and-bulls', (req, res) => {
   if(!supportedContext)
       {
         return res.json({
-            fulfillmentText:   "Don't know what you are saying "
+            fulfillmentText:   "Don't know what you are saying. Try again. "
         });
       }
 
@@ -206,7 +206,7 @@ if(!displayHelp )
         }
         else 
         {
-            responseText  = saidWord + " is not a " + lengthOfWord + " letter word"  
+            responseText  = saidWord + " is not a " + lengthOfWord + " letter word. Try again"  
             //responseText += " You have " + lifespanCount + "attempts";          
             return res.json({
                 
@@ -263,7 +263,7 @@ myWord = client.get(sessionId, function (error, result) {
 
         return res.json({
          
-            fulfillmentText:  "Here are the words you tried so far. " + result
+            fulfillmentText:  "Here are the words you tried so far. " + result + " You can say I give up if you don't want to continue "
         });
     } 
     if(action.indexOf("Giveup") == 0)
