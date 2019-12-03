@@ -78,7 +78,7 @@ processWords = (sessionId, myWord, saidWord,result, lifespanCount,myContext, res
     if(myWord.indexOf(saidWord) == 0) {
       client.del(sessionId); //reset the word
        return res.json({
-              fulfillmentText: myWord + " is right. If you want to play again, say the number of letters ",
+              fulfillmentText: myWord + " is right. If you want to play again, say the number of letters. You can say Stop to end the game. ",
               "outputContexts": [
               {
                 "name": myContext,
@@ -135,7 +135,7 @@ processWords = (sessionId, myWord, saidWord,result, lifespanCount,myContext, res
     //else 
      //  responseText += " "; //" You have " + lifespanCount + "attempts";
     return res.json({
-              fulfillmentText:   responseText + "Try again "
+              fulfillmentText:   responseText + "Try another word "
           });
 }
 
