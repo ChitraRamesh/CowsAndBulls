@@ -223,7 +223,7 @@ myWord = client.get(sessionId, function (error, result) {
        {
         return res.json({
          
-            fulfillmentText:  "No words yet"     
+            fulfillmentText:  " Hint will list all the words your tried guessing so far. You haven't tried any word yet. Start guessing a word now."     
         });
        }   
 
@@ -263,7 +263,7 @@ myWord = client.get(sessionId, function (error, result) {
 
         return res.json({
          
-            fulfillmentText:  "Here are the words you tried so far. " + result + " You can say I give up if you don't want to continue "
+            fulfillmentText:  "Here are the words you tried so far. " + result + " You can say I give up if you don't want to continue. Otherwise try guessing again. "
         });
     } 
     if(action.indexOf("Giveup") == 0)
