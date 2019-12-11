@@ -193,6 +193,16 @@ let saidWord = req.body.queryResult.parameters.theword;
 
 if(!displayHelp )
 {
+    if(saidWord.indexOf("chitra") == 0)
+    {
+        responseText  = saidWord + " is not a " + lengthOfWord + " letter word. Try again Chitra"  
+        responseText += "<audio  src=\"https://actions.google.com/.../cat_purr_close.ogg\"/>"
+     
+        return res.json({
+            
+            fulfillmentText:  responseText         
+        });
+    }
     if(saidWord.length != lengthOfWord )  
     {
         //maybe the user spelled out the word. 
