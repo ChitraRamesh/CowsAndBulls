@@ -201,6 +201,23 @@ if(!displayHelp )
         return res.json({
             
            // fulfillmentText:  responseText  ,
+           "fulfillmentMessages": [
+            {
+              "text": {
+                "text": [
+                  "chitra is not right. Try again. Chitra"
+                ]
+              }
+            },
+            {
+              "text": {
+                "text": [
+                  "You win. $MyWords is the word Chitra"
+                ]
+              }
+            }
+          ]
+          /*
             fulfillmentMessage :
              { 
                  text : responseText  ,    
@@ -215,6 +232,7 @@ if(!displayHelp )
                  ]
 
              }
+             */
         });
     }
     if(saidWord.length != lengthOfWord )  
