@@ -199,25 +199,28 @@ if(!displayHelp )
         //responseText += "<audio  src=\"https://actions.google.com/.../cat_purr_close.ogg\"/>"
      
         return res.json({
+
+
             
+                "payload": {
+                  "google": {
+                    "expectUserResponse": true,
+                    "richResponse": {
+                      "items": [
+                        {
+                          "simpleResponse": {
+                            "textToSpeech": "Welcome! Do you want me to change color or pause spinning? You can also tell me to ask you later."
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+           
+            /*
            // fulfillmentText:  responseText  ,
-           "fulfillmentMessages": [
-            {
-              "text": {
-                "text": [
-                  "chitra is not right. Try again. Chitra"
-                ]
-              }
-            },
-            {
-              "text": {
-                "text": [
-                  "You win. $MyWords is the word Chitra"
-                ]
-              }
-            }
-          ],
-          "richResponse": {
+           "fulfillmentMessages": {
+            
             "items": [
               {
                 "simpleResponse": {
@@ -227,7 +230,7 @@ if(!displayHelp )
               }
             ]
           }
-          /*
+          
             fulfillmentMessage :
              { 
                  text : responseText  ,    
