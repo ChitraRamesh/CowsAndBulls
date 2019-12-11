@@ -78,6 +78,7 @@ processWords = (sessionId, myWord, saidWord,result, lifespanCount,myContext, res
     if(myWord.indexOf(saidWord) == 0) {
       client.del(sessionId); //reset the word
        return res.json({
+           /*
               fulfillmentText: myWord + " is right. If you want to play again, say the number of letters. You can say Stop to end the game. ",
               "outputContexts": [
               {
@@ -86,6 +87,24 @@ processWords = (sessionId, myWord, saidWord,result, lifespanCount,myContext, res
                  
               }
             ]
+           */
+            "payload": {
+                "google": {
+                  "expectUserResponse": true,
+                  "richResponse": {
+                    "items": [
+                      {
+                        "simpleResponse": {
+                         // "ssml": "<speak><audio src=\"https://actions.google.com/sounds/v1/cartoon/concussive_hit_guitar_boing.ogg\"> clap </audio> </speak>",
+                          "displayText":" Got it right ",
+                          "ssml": "<speak> <par> <media xml:id=\"intro\" soundLevel=\"5dB\" fadeOutDur=\"2.0s\"><audio src=\"https://upload.wikimedia.org/wikipedia/commons/4/43/Nowhere_Land_%28ISRC_USUAN1600051%29.mp3\" clipEnd=\"5.0s\"> </audio></media>  <media begin=\"intro.end-2.0s\"> <speak><emphasis level=\"strong\">You Got it right. Say the number of letters again for the next game</emphasis></speak> </media></par> </speak>"
+                          
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
           }); 
       } 
     var responseText = "" ;
@@ -220,35 +239,7 @@ if(!displayHelp )
                   }
                 }
            
-            /*
-           // fulfillmentText:  responseText  ,
-           "fulfillmentMessages": {
-            
-            "items": [
-              {
-                "simpleResponse": {
-                  "ssml": "<speak>Here are <say-as interpret-as=\"characters\">SSML</say-as> samples. I can pause <break time=\"3\" />. I can play a sound <audio src=\"https://actions.google.com/sounds/v1/alarms/winding_alarm_clock.ogg\">your wave file</audio>. I can speak in cardinals. Your position is <say-as interpret-as=\"cardinal\">10</say-as> in line. Or I can speak in ordinals. You are <say-as interpret-as=\"ordinal\">10</say-as> in line. Or I can even speak in digits. Your position in line is <say-as interpret-as=\"digits\">10</say-as>. I can also substitute phrases, like the <sub alias=\"World Wide Web Consortium\">W3C</sub>. Finally, I can speak a paragraph with two sentences. <p><s>This is sentence one.</s><s>This is sentence two.</s></p></speak>",
-                  "displayText": "This is a SSML sample. Make sure your sound is enabled to hear the demo"
-                }
-              }
-            ]
-          }
-          
-            fulfillmentMessage :
-             { 
-                 text : responseText  ,    
-                 simpleResponses :
-                 [
-                      {
-                        "simpleResponse": {
-                            "ssml": "<speak>Here are <say-as interpret-as=\"characters\">SSML</say-as> samples. I can pause <break time=\"3\" />. I can play a sound <audio src=\"https://actions.google.com/sounds/v1/alarms/winding_alarm_clock.ogg\">your wave file</audio>. I can speak in cardinals. Your position is <say-as interpret-as=\"cardinal\">10</say-as> in line. Or I can speak in ordinals. You are <say-as interpret-as=\"ordinal\">10</say-as> in line. Or I can even speak in digits. Your position in line is <say-as interpret-as=\"digits\">10</say-as>. I can also substitute phrases, like the <sub alias=\"World Wide Web Consortium\">W3C</sub>. Finally, I can speak a paragraph with two sentences. <p><s>This is sentence one.</s><s>This is sentence two.</s></p></speak>",
-                            "displayText": "This is a SSML sample. Make sure your sound is enabled to hear the demo"
-                          }
-                      }
-                 ]
-
-             }
-             */
+             
         });
     }
     if(saidWord.length != lengthOfWord )  
@@ -268,7 +259,26 @@ if(!displayHelp )
             //responseText += " You have " + lifespanCount + "attempts";          
             return res.json({
                 
-                fulfillmentText:  responseText         
+                fulfillmentText:  responseText ,
+                /*
+                "payload": {
+                    "google": {
+                      "expectUserResponse": true,
+                      "richResponse": {
+                        "items": [
+                          {
+                            "simpleResponse": {
+                             // "ssml": "<speak><audio src=\"https://actions.google.com/sounds/v1/cartoon/concussive_hit_guitar_boing.ogg\"> clap </audio> </speak>",
+                              "displayText":" Got it right ",
+                              "ssml": "<speak> <par> <media xml:id=\"intro\" soundLevel=\"5dB\" fadeOutDur=\"2.0s\"><audio src=\"https://actions.google.com/sounds/v1/cartoon/concussive_hit_guitar_boing.ogg\"> </audio></media>  <media begin=\"intro.end-2.0s\"> <speak><emphasis level=\"strong\"></emphasis></speak> </media></par> </speak>"
+                              
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                  */
             });
         }
     }
