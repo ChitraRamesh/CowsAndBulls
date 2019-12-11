@@ -209,8 +209,10 @@ if(!displayHelp )
                       "items": [
                         {
                           "simpleResponse": {
-                            "ssml": "<speak><audio src=\"https://actions.google.com/sounds/v1/cartoon/concussive_hit_guitar_boing.ogg\"> clap </audio> </speak>",
-                            "displayText":" Try again. "
+                           // "ssml": "<speak><audio src=\"https://actions.google.com/sounds/v1/cartoon/concussive_hit_guitar_boing.ogg\"> clap </audio> </speak>",
+                            "displayText":" Try again. ",
+                            "ssml": "<speak> <par> <media xml:id=\"intro\" soundLevel=\"5dB\" fadeOutDur=\"2.0s\"><audio src=\"https://upload.wikimedia.org/wikipedia/commons/4/43/Nowhere_Land_%28ISRC_USUAN1600051%29.mp3\" clipEnd=\"5.0s\"> </audio></media> <speak><emphasis level=\"strong\">You Got it right!!</emphasis></speak> </speak>"
+                            
                           }
                         }
                       ]
