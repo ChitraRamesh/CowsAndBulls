@@ -80,14 +80,15 @@ processWords = (sessionId, myWord, saidWord,result, lifespanCount,myContext, res
        return res.json({
            /*
               fulfillmentText: myWord + " is right. If you want to play again, say the number of letters. You can say Stop to end the game. ",
+             */
               "outputContexts": [
               {
                 "name": myContext,
                 "lifespanCount": 0 //end game.
                  
               }
-            ]
-           */
+            ],
+           
             "payload": {
                 "google": {
                   "expectUserResponse": true,
